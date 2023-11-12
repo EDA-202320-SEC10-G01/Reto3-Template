@@ -31,7 +31,7 @@ from DISClib.DataStructures import mapentry as me
 assert cf
 from tabulate import tabulate
 import traceback
-
+sys.setrecursionlimit(10000)
 """
 La vista se encarga de la interacción con el usuario
 Presenta el menu de opciones y por cada seleccion
@@ -44,8 +44,8 @@ def new_controller():
     """
         Se crea una instancia del controlador
     """
-    #TODO: Llamar la función del controlador donde se crean las estructuras de datos
-    pass
+    
+    return controller.new_controller()
 
 
 def print_menu():
@@ -66,16 +66,71 @@ def load_data(control):
     """
     Carga los datos
     """
-    #TODO: Realizar la carga de datos
-    pass
+    tamaño = input("""Ingrese el numero asociado al tamaño de la muestra: \n
+    1. Small \n
+    2. 5% \n
+    3. 10 % \n
+    4. 20 % \n
+    5. 30 % \n
+    6. 50 % \n
+    7. 80 % \n
+    8. Large \n""")
+    
+    tiempo_carga, memoria = controller.load_data_file(control, tamaño)
+
+    print("=============== Carga de Datos ==================")
+    print(f"\nTiempo de carga: {tiempo_carga} ms")
+    print(f"\nMemoria utilizada: {memoria} MB")
+    
+    
+def print_table(table, columns):
+    
+    if lt.size(table) == 0:
+        print("No hay datos para mostrar")
+        
+    elif lt.size(table) > 10:
+        first_five = lt.subList(table, 1, 5)
+        last_five = lt.subList(table, lt.size(table)-4, 5)
+        combined_list = lt.newList("ARRAY_LIST")
+        
+        for i in lt.iterator(first_five):
+            lt.addLast(combined_list, i)
+            
+        for i in lt.iterator(last_five):
+            lt.addLast(combined_list, i)
+            
+
+        combined_list = columns_to_show(combined_list, columns)
+            
+        print(f"\nDe {lt.size(table)} elementos, se muestran los primeros y últimos 5\n")
+        print(tabulate(lt.iterator(combined_list), headers = "keys", tablefmt = "fancy_grid"))
+    
+    else:
+        
+        new_table = columns_to_show(table, columns)
+        print(f"\n Se encontraron {lt.size(table)} elementos mostrados a continuacion\n")
+        print(tabulate(lt.iterator(table), tablefmt = "fancy_grid"))
+        
+
+def columns_to_show(list_dicts, columns):
+    
+    new_table = lt.newList("ARRAY_LIST")
+    
+    for i in lt.iterator(list_dicts):
+        new_dict = {}
+        for j in columns:
+            new_dict[j] = i[j]
+        lt.addLast(new_table, new_dict)
+        
+    return new_table
 
 
-def print_data(control, id):
-    """
-        Función que imprime un dato dado su ID
-    """
-    #TODO: Realizar la función para imprimir un elemento
-    pass
+def print_data(control):
+    
+    columns_to_show = ["time", "lat", "long", "depth", "mag", "sig", "nst", "gap", "title", "felt", "cdi", "mmi", "tsunami"]
+    
+    print_table(control["earthquakes_list"], columns_to_show)
+    
 
 def print_req_1(control):
     """
@@ -83,63 +138,6 @@ def print_req_1(control):
     """
     # TODO: Imprimir el resultado del requerimiento 1
     pass
-
-
-def print_req_2(control):
-    """
-        Función que imprime la solución del Requerimiento 2 en consola
-    """
-    # TODO: Imprimir el resultado del requerimiento 2
-    pass
-
-
-def print_req_3(control):
-    """
-        Función que imprime la solución del Requerimiento 3 en consola
-    """
-    # TODO: Imprimir el resultado del requerimiento 3
-    pass
-
-
-def print_req_4(control):
-    """
-        Función que imprime la solución del Requerimiento 4 en consola
-    """
-    # TODO: Imprimir el resultado del requerimiento 4
-    pass
-
-
-def print_req_5(control):
-    """
-        Función que imprime la solución del Requerimiento 5 en consola
-    """
-    # TODO: Imprimir el resultado del requerimiento 5
-    pass
-
-
-def print_req_6(control):
-    """
-        Función que imprime la solución del Requerimiento 6 en consola
-    """
-    # TODO: Imprimir el resultado del requerimiento 6
-    pass
-
-
-def print_req_7(control):
-    """
-        Función que imprime la solución del Requerimiento 7 en consola
-    """
-    # TODO: Imprimir el resultado del requerimiento 7
-    pass
-
-
-def print_req_8(control):
-    """
-        Función que imprime la solución del Requerimiento 8 en consola
-    """
-    # TODO: Imprimir el resultado del requerimiento 8
-    pass
-
 
 # Se crea el controlador asociado a la vista
 control = new_controller()
@@ -157,6 +155,7 @@ if __name__ == "__main__":
         if int(inputs) == 1:
             print("Cargando información de los archivos ....\n")
             data = load_data(control)
+            print_data(control)
         elif int(inputs) == 2:
             print_req_1(control)
 

@@ -29,108 +29,52 @@ import tracemalloc
 """
 El controlador se encarga de mediar entre la vista y el modelo.
 """
-
+csv.field_size_limit(100000000)
 
 def new_controller():
     """
     Crea una instancia del modelo
     """
-    #TODO: Llamar la función del modelo que crea las estructuras de datos
-    pass
+    return model.new_data_structs()
 
 
 # Funciones para la carga de datos
 
-def load_data(control, filename):
+def load_data_file(control, tamaño):
     """
     Carga los datos del reto
     """
-    # TODO: Realizar la carga de datos
-    pass
+    tamaños = {"1": "small",
+               "2": "5pct",
+               "3": "10pct",
+               "4": "20pct",
+               "5": "30pct",
+               "6": "50pct",
+               "7": "80pct",
+               "8": "large"}
+    
+    tracemalloc.start()
+    tiempo_carga = get_time()
+    memoria_inicial = get_memory()
+    
+    if tamaño in list(tamaños.keys()):
+        
+        tamaño = tamaños[tamaño]
+        
+        file = cf.data_dir + f"/earthquakes/temblores-utf8-{tamaño}.csv"
+    
+        input_file = csv.DictReader(open(file, encoding="utf-8"))
+        for fila in input_file:
+            model.add_data(control, fila)
+        
+    else:
+        print("Tamaño no valido")
 
-
-# Funciones de ordenamiento
-
-def sort(control):
-    """
-    Ordena los datos del modelo
-    """
-    #TODO: Llamar la función del modelo para ordenar los datos
-    pass
-
-
-# Funciones de consulta sobre el catálogo
-
-def get_data(control, id):
-    """
-    Retorna un dato por su ID.
-    """
-    #TODO: Llamar la función del modelo para obtener un dato
-    pass
-
-
-def req_1(control):
-    """
-    Retorna el resultado del requerimiento 1
-    """
-    # TODO: Modificar el requerimiento 1
-    pass
-
-
-def req_2(control):
-    """
-    Retorna el resultado del requerimiento 2
-    """
-    # TODO: Modificar el requerimiento 2
-    pass
-
-
-def req_3(control):
-    """
-    Retorna el resultado del requerimiento 3
-    """
-    # TODO: Modificar el requerimiento 3
-    pass
-
-
-def req_4(control):
-    """
-    Retorna el resultado del requerimiento 4
-    """
-    # TODO: Modificar el requerimiento 4
-    pass
-
-
-def req_5(control):
-    """
-    Retorna el resultado del requerimiento 5
-    """
-    # TODO: Modificar el requerimiento 5
-    pass
-
-def req_6(control):
-    """
-    Retorna el resultado del requerimiento 6
-    """
-    # TODO: Modificar el requerimiento 6
-    pass
-
-
-def req_7(control):
-    """
-    Retorna el resultado del requerimiento 7
-    """
-    # TODO: Modificar el requerimiento 7
-    pass
-
-
-def req_8(control):
-    """
-    Retorna el resultado del requerimiento 8
-    """
-    # TODO: Modificar el requerimiento 8
-    pass
-
+    tiempo_carga = round(delta_time(tiempo_carga, get_time()),2)
+    memoria = round(delta_memory(get_memory(), memoria_inicial),2)
+    tracemalloc.stop()
+    
+    return tiempo_carga, memoria
 
 # Funciones para medir tiempos de ejecucion
 
@@ -167,5 +111,5 @@ def delta_memory(stop_memory, start_memory):
     for stat in memory_diff:
         delta_memory = delta_memory + stat.size_diff
     # de Byte -> kByte
-    delta_memory = delta_memory/1024.0
+    delta_memory = delta_memory/1024000
     return delta_memory
