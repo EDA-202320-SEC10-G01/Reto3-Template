@@ -113,3 +113,21 @@ def delta_memory(stop_memory, start_memory):
     # de Byte -> kByte
     delta_memory = delta_memory/1024000
     return delta_memory
+
+# Funciones de requerimientos   
+def req_1(control, fecha_inicial, fecha_final):
+    """
+    Retorna una lista con los sismos que ocurrieron en el intervalo de tiempo dado
+    """
+    tracemalloc.start()
+    first_time = get_time()
+    first_memory = get_memory()
+    model_response = model.req_1(control, fecha_inicial, fecha_final)
+    last_time = get_time()
+    last_memory = get_memory()
+    tracemalloc.stop()
+
+    time = delta_time(first_time, last_time)
+    memory = delta_memory(last_memory, first_memory)
+
+    return model_response, time, memory

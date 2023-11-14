@@ -136,8 +136,20 @@ def print_req_1(control):
     """
         Función que imprime la solución del Requerimiento 1 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 1
-    pass
+    # Se obtiene la información solicitada al modelo
+    fecha_inicial = input("Ingrese la fecha inicial en formato AAAA-MM-DDTHH:MM:SS\n")
+    fecha_final = input("Ingrese la fecha final en formato AAAA-MM-DDTHH:MM:SS\n")
+
+    #Se establecen los encabezados de la tabla
+    columns_to_show = ["time", "lat", "long", "depth", "mag", "sig", "nst", "gap", "title", "felt", "cdi", "mmi", "tsunami"]
+    # Se llama la funcion del controlador para obtener los datos
+    data = controller.req_1(control, fecha_inicial, fecha_final)
+    time,mag,lat,long,depth, sig,gap,nst,title,cdi,mmi,magType,type,code  = data
+    # Se imprime la tabla
+    print_table(code, data)
+
+
+    
 
 # Se crea el controlador asociado a la vista
 control = new_controller()
