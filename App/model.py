@@ -69,7 +69,8 @@ def add_data(control, data):
     
 def req_1(control, date_time1, date_time2):
     
-    tree_dates = om.newMap(omaptype="RBT", comparar_fechas_hora(data1, data2))
+    comparar = comparar_fechas_hora(data1, data2)
+    tree_dates = om.newMap(omaptype="RBT", comparar)
     
     for earthquake in lt.iterator(control["earthquakes_list"]):
         
@@ -79,7 +80,16 @@ def req_1(control, date_time1, date_time2):
     lista_fechas = om.keys(tree_dates, date_time1, date_time2)
     
     return lista_fechas
-    
+
+
+def req_2(control,inf_mag,sup_mag):
+    tree_mag = om.newMap(omaptype="RBT")
+    for earthquake in lt.iterator(control["earthquakes_list"]):
+        mag = earthquake["mag"]
+        if mag >= inf_mag and mag <= sup_mag:
+            mp.put(tree_mag, mag, earthquake)
+    list_mag = om.keys(tree_mag, inf_mag, sup_mag)
+    return list_mag
     
 def req_6(control, año, latitud, longitud, radio, n_eventos):
     
@@ -138,7 +148,8 @@ def req_6(control, año, latitud, longitud, radio, n_eventos):
     
             
             
-    
+
+#Funciones para comparar fechas y horas   
 def comparar_fechas_hora(date_time1, date_time2):
     
     date1, time1 = date_time1.split("T")

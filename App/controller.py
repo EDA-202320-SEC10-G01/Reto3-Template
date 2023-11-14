@@ -122,7 +122,7 @@ def req_1(control, fecha_inicial, fecha_final):
     tracemalloc.start()
     first_time = get_time()
     first_memory = get_memory()
-    model_response = model.req_1(control, fecha_inicial, fecha_final)
+    model_response = model.req_1(control,date_time1, date_time2)
     last_time = get_time()
     last_memory = get_memory()
     tracemalloc.stop()
