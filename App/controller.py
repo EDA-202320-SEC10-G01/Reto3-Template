@@ -66,6 +66,8 @@ def load_data_file(control, tamaño):
         input_file = csv.DictReader(open(file, encoding="utf-8"))
         for fila in input_file:
             model.add_data(control, fila)
+            
+        model.create_trees(control, "mag")
         
     else:
         print("Tamaño no valido")

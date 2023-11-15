@@ -56,7 +56,10 @@ def new_data_structs():
     Inicializa las estructuras de datos del modelo. Las crea de
     manera vacía para posteriormente almacenar la información.
     """
-    control = {"earthquakes_list": lt.newList("ARRAY_LIST")}
+    control = {"earthquakes_list": lt.newList("ARRAY_LIST"),
+               "earthquakes_tree_date": None,
+               "earthquakes_tree_mag": None,
+               "earthquakes_tree_depth": None}
     
     return control
 
@@ -66,6 +69,36 @@ def add_data(control, data):
     Adiciona un dato a las estructuras de datos del modelo
     """
     lt.addLast(control["earthquakes_list"], data)
+    
+
+def create_tree(control, parameter):
+    
+    def comparacion_llaves(earthquake1, earthquake2):
+    
+        codigo1, parametro1 = earthquake1.split("-")
+        codigo2, parametro2 = earthquake2.split("-")
+        
+        if parametro1 > parametro2:
+            return 1
+        elif parametro1 == parametro2:
+            if codigo1 > codigo2:
+                return 1
+            elif codigo1 == codigo2:
+                return 0
+            else:
+                return -1
+        else:
+            return -1
+    
+    tree = om.newMap(omaptype="RBT", comparefunction=comparacion_llaves)
+    
+    for earthquake in lt.iterator(control["earthquakes_list"]):
+        om.put(tree, f"{earthquake["code"]}-{earthquake["parameter"]}" , earthquake)
+        
+    return tree
+    
+
+    
     
     
 
