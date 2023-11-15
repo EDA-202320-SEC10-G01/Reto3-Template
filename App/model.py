@@ -151,7 +151,51 @@ def req_2(control, magnitud_inicial, magnitud_final):
     merg.sort(lista_por_magnitud, lambda x, y: float(x["mag"]) > float(y["mag"]))
     
     return lista_por_magnitud
+def req_3(control, mag_min, depth_max):
+    # Crear una lista para almacenar los eventos que cumplen con los criterios
+    eventos_filtrados = lt.newList()
+
+    # Filtrar los eventos según la magnitud y profundidad
+    for earthquake in lt.iterator(control["earthquakes_list"]):
+        mag = earthquake["mag"]
+        depth = earthquake["depth"]
+
+        if mag >= mag_min and depth <= depth_max:
+            lt.addLast(eventos_filtrados, earthquake)
+
     
+    return eventos_filtrados
+
+def req_4(control, sig_min, gap_max):
+    # Crear una lista para almacenar los eventos que cumplen con los criterios
+    eventos_filtrados = lt.newList()
+
+    # Filtrar los eventos según la significancia y el gap
+    for earthquake in lt.iterator(control["earthquakes_list"]):
+        sig = earthquake["sig"]
+        gap = earthquake["gap"]
+
+        if sig >= sig_min and gap <= gap_max:
+            lt.addLast(eventos_filtrados, earthquake)
+
+    
+    eventos_filtrados = sorted(lt.toArray(eventos_filtrados), key=lambda x: x["date"], reverse=True)
+
+    
+    eventos_recientes = eventos_filtrados[:10]
+
+    return eventos_recientes
+
+def req_5(control, depth_min, nst_min):
+    # Crear una lista para almacenar los eventos que cumplen con los criterios
+    tree = om.newMap(omaptype="RBT", cmpfunction=comparacion_llaves)
+    for earthquake in lt.iterator(control["earthquakes_list"]):
+    depth_min = float(depth_min)
+    nst_min = float(nst_min)
+    key = f"{depth}-{nst}"
+    eventos = om.put(tree, key, earthquake)
+    return eventos
+
 
 def req_6(control, año, latitud, longitud, radio, n_eventos):
     
