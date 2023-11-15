@@ -76,6 +76,10 @@ def load_data_file(control, tamaño):
     
     return tiempo_carga, memoria
 
+def req_6(control, año, latitud, longitud, radio, n_eventos):
+    
+    return model.req_6(control, año, latitud, longitud, radio, n_eventos)
+
 # Funciones para medir tiempos de ejecucion
 
 def get_time():

@@ -149,7 +149,21 @@ def print_req_1(control):
     print_table(code, data)
 
 
+def print_req_6(control):
+    """
+        Función que imprime la solución del Requerimiento 6 en consola
+    """
+    año = input("Ingrese el año a buscar\n")
+    latitud = input("Ingrese la latitud a buscar\n")
+    longitud = input("Ingrese la longitud a buscar\n")
+    radio = input("Ingrese el radio a buscar\n")
+    n_eventos = input("Ingrese el numero de eventos a buscar\n")
+    columnas = ["time", "mag", "lat", "long", "depth", "sig", "gap", "nst", "title", "cdi", "mmi", "magType", "type", "code"]
     
+    
+    data = controller.req_6(control, año, latitud, longitud, radio, n_eventos)
+    
+    print_table(data, columnas) 
 
 # Se crea el controlador asociado a la vista
 control = new_controller()
