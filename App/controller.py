@@ -157,36 +157,41 @@ def delta_memory(stop_memory, start_memory):
     return delta_memory
 
 # Funciones de requerimientos   
-def req_1(control, date1, date2):
-    """
-    Retorna una lista con los sismos que ocurrieron en el intervalo de tiempo dado
-    """
+def req_1(control, fecha_inicial, fecha_final):
+    
     tracemalloc.start()
     first_time = get_time()
     first_memory = get_memory()
-    model_response = model.req_1(control, date1, date2)
+    
+    model_response = model.req_1(control, fecha_inicial, fecha_final)
+    
     last_time = get_time()
     last_memory = get_memory()
     tracemalloc.stop()
-
+    
     time = delta_time(first_time, last_time)
     memory = delta_memory(last_memory, first_memory)
-
+    
     return model_response, time, memory
 
-def req_2(control,mag1,mag2):
+def req_2(control, magnitud_inicial, magnitud_final):
+    
     tracemalloc.start()
     first_time = get_time()
     first_memory = get_memory()
-    model_response = model.req_2(control, mag1, mag2)
+    
+    model_response = model.req_2(control, magnitud_inicial, magnitud_final)
+    
     last_time = get_time()
     last_memory = get_memory()
     tracemalloc.stop()
-
+    
     time = delta_time(first_time, last_time)
     memory = delta_memory(last_memory, first_memory)
-
+    
     return model_response, time, memory
+
+
 
 def req_3(control, mag_min, depth_max):
     tracemalloc.start()
@@ -224,6 +229,15 @@ def req_5(control, depth_min, nst_min):
     last_time = get_time()
     last_memory = get_memory()
     tracemalloc.stop()
+
+    time = delta_time(first_time, last_time)
+    memory = delta_memory(last_memory, first_memory)
+
+    return model_response, time, memory
+
+def req_6(control, año, latitud, longitud, radio, n_eventos):
+    
+    return model.req_6(control, año, latitud, longitud, radio, n_eventos)
 
     time = delta_time(first_time, last_time)
     memory = delta_memory(last_memory, first_memory)
