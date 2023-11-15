@@ -67,7 +67,8 @@ def load_data_file(control, tamaño):
         for fila in input_file:
             model.add_data(control, fila)
             
-        model.create_trees(control, "mag")
+        control["earthquakes_tree_mag"] = model.create_tree(control, "mag")
+
         
     else:
         print("Tamaño no valido")

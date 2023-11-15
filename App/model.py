@@ -90,10 +90,10 @@ def create_tree(control, parameter):
         else:
             return -1
     
-    tree = om.newMap(omaptype="RBT", comparefunction=comparacion_llaves)
+    tree = om.newMap(omaptype="RBT", cmpfunction=comparacion_llaves)
     
     for earthquake in lt.iterator(control["earthquakes_list"]):
-        om.put(tree, f"{earthquake["code"]}-{earthquake["parameter"]}" , earthquake)
+        om.put(tree, f"{earthquake["code"]}-{earthquake[parameter]}" , earthquake)
         
     return tree
     
