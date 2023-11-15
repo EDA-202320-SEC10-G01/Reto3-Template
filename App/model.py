@@ -71,16 +71,16 @@ def add_data(control, data):
     lt.addLast(control["earthquakes_list"], data)
     
 
-def create_tree(control, parameter):
+def create_tree_time(control):
     
     def comparacion_llaves(earthquake1, earthquake2):
-    
-        codigo1, parametro1 = earthquake1.split("-")
-        codigo2, parametro2 = earthquake2.split("-")
         
-        if parametro1 > parametro2:
+        codigo1, time1 = earthquake1.split("^")
+        codigo2, time2 = earthquake2.split("^")
+        
+        if comparar_tiempos(time1, time2) == 1:
             return 1
-        elif parametro1 == parametro2:
+        elif comparar_tiempos(time1, time2) == 0:
             if codigo1 > codigo2:
                 return 1
             elif codigo1 == codigo2:
@@ -93,13 +93,64 @@ def create_tree(control, parameter):
     tree = om.newMap(omaptype="RBT", cmpfunction=comparacion_llaves)
     
     for earthquake in lt.iterator(control["earthquakes_list"]):
-        om.put(tree, f"{earthquake["code"]}-{earthquake[parameter]}" , earthquake)
+        om.put(tree, f"{earthquake["code"]}^{earthquake["time"]}" , earthquake)
+        
+    return tree
+
+
+def create_tree_mag(control):
+    
+    def comparacion_llaves(earthquake1, earthquake2):
+        
+        codigo1, mag1 = earthquake1.split("^")
+        codigo2, mag2 = earthquake2.split("^")
+        
+        if float(mag1) > float(mag2):
+            return 1
+        elif float(mag1) == float(mag2):
+            if codigo1 > codigo2:
+                return 1
+            elif codigo1 == codigo2:
+                return 0
+            else:
+                return -1
+        else:
+            return -1
+    
+    tree = om.newMap(omaptype="RBT", cmpfunction=comparacion_llaves)
+    
+    for earthquake in lt.iterator(control["earthquakes_list"]):
+        om.put(tree, f"{earthquake["code"]}^{earthquake["mag"]}" , earthquake)
         
     return tree
     
 
+#Requerimientos
+
+def req_1(control, fecha_inicial, fecha_final):
     
+    lista_por_año = lt.newList()
     
+    for earthquake in lt.iterator(control["earthquakes_list"]):
+        if (comparar_tiempos(earthquake["time"], fecha_inicial) == 1 and comparar_tiempos(earthquake["time"], fecha_final) == -1) or comparar_tiempos(earthquake["time"], fecha_inicial) == 0 or comparar_tiempos(earthquake["time"], fecha_final) == 0:
+            lt.addLast(lista_por_año, earthquake)
+            
+    merg.sort(lista_por_año, lambda x, y: comparar_tiempos(x["time"], y["time"]) == 1)
+    
+    return lista_por_año, lt.size(lista_por_año)
+
+
+def req_2(control, magnitud_inicial, magnitud_final):
+    
+    lista_por_magnitud = lt.newList()
+    
+    for earthquake in lt.iterator(control["earthquakes_list"]):
+        if float(earthquake["mag"]) >= float(magnitud_inicial) and float(earthquake["mag"]) <= float(magnitud_final):
+            lt.addLast(lista_por_magnitud, earthquake)
+            
+    merg.sort(lista_por_magnitud, lambda x, y: float(x["mag"]) > float(y["mag"]))
+    
+    return lista_por_magnitud
     
 
 def req_6(control, año, latitud, longitud, radio, n_eventos):

@@ -133,11 +133,62 @@ def print_data(control):
     
 
 def print_req_1(control):
+    
     """
         Función que imprime la solución del Requerimiento 1 en consola
     """
-    # Se obtiene la información solicitada al modelo
-    print(controller.model.om.minKey(control["earthquakes_tree_mag"]))
+    año_inicial = input("Ingrese el año inicial a buscar\n") 
+    mes_inicial = input("Ingrese el mes inicial a buscar\n")
+    dia_inicial = input("Ingrese el dia inicial a buscar\n")
+    hora_inicial = input("Ingrese la hora inicial a buscar\n")
+    minuto_inicial = input("Ingrese el minuto inicial a buscar\n")
+    
+    año_final = input("Ingrese el año final a buscar\n")
+    mes_final = input("Ingrese el mes final a buscar\n")
+    dia_final = input("Ingrese el dia final a buscar\n")
+    hora_final = input("Ingrese la hora final a buscar\n")
+    minuto_final = input("Ingrese el minuto final a buscar\n")
+    
+    fecha_inicial = f"{año_inicial}-{mes_inicial}-{dia_inicial}T{hora_inicial}:{minuto_inicial}:00.0Z"
+    fecha_final = f"{año_final}-{mes_final}-{dia_final}T{hora_final}:{minuto_final}:00.0Z"
+    columns = ["time", "mag", "lat" , "long", "depth", "sig", "gap", "nst", "title", "cdi", "mmi", "magType", "type", "code"]
+    
+    print("\n=============== Requerimiento 1 ==================")
+    print("\n=============== Datos del Usuario ==================")
+    print(f"Fecha inicial: {fecha_inicial}")
+    print(f"Fecha final: {fecha_final}")
+    
+    controller_response = controller.req_1(control, fecha_inicial, fecha_final)
+    
+    print("\n=============== Resultados ==================")    
+    print(f"Tiempo de ejecución: {controller_response[0]} ms")
+    print(f"Memoria utilizada: {controller_response[1]} MB")
+    print(f"Numero de eventos: ")
+    
+    print_table(controller_response[2], columns)
+    
+def print_req_2(control):
+    
+    magnitud_inicial = input("Ingrese la magnitud inicial a buscar\n")
+    magnitud_final = input("Ingrese la magnitud final a buscar\n")
+    
+    columns = ["time", "mag", "lat" , "long", "depth", "sig", "gap", "nst", "title", "cdi", "mmi", "magType", "type", "code"]
+    
+    print("\n=============== Requerimiento 2 ==================")
+    
+    print("\n=============== Datos del Usuario ==================")
+    print(f"Magnitud inicial: {magnitud_inicial}")
+    print(f"Magnitud final: {magnitud_final}")
+    
+    controller_response = controller.req_2(control, magnitud_inicial, magnitud_final)
+    
+    print("\n=============== Resultados ==================")
+    print(f"Tiempo de ejecución: {controller_response[0]} ms")
+    print(f"Memoria utilizada: {controller_response[1]} MB")
+    print(f"Numero de eventos: {lt.size(controller_response[2])}")
+    
+    print_table(controller_response[2], columns)   
+    
 
 
 def print_req_6(control):

@@ -67,7 +67,7 @@ def load_data_file(control, tamaño):
         for fila in input_file:
             model.add_data(control, fila)
             
-        control["earthquakes_tree_mag"] = model.create_tree(control, "mag")
+        
 
         
     else:
@@ -78,6 +78,41 @@ def load_data_file(control, tamaño):
     tracemalloc.stop()
     
     return tiempo_carga, memoria
+
+
+def req_1(control, fecha_inicial, fecha_final):
+    
+    tracemalloc.start()
+    first_time = get_time()
+    first_memory = get_memory()
+    
+    model_response = model.req_1(control, fecha_inicial, fecha_final)
+    
+    last_time = get_time()
+    last_memory = get_memory()
+    tracemalloc.stop()
+    
+    time = delta_time(first_time, last_time)
+    memory = delta_memory(last_memory, first_memory)
+    
+    return model_response, time, memory
+
+def req_2(control, magnitud_inicial, magnitud_final):
+    
+    tracemalloc.start()
+    first_time = get_time()
+    first_memory = get_memory()
+    
+    model_response = model.req_2(control, magnitud_inicial, magnitud_final)
+    
+    last_time = get_time()
+    last_memory = get_memory()
+    tracemalloc.stop()
+    
+    time = delta_time(first_time, last_time)
+    memory = delta_memory(last_memory, first_memory)
+    
+    return model_response, time, memory
 
 def req_6(control, año, latitud, longitud, radio, n_eventos):
     
