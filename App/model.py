@@ -97,10 +97,88 @@ def create_tree(control, parameter):
         
     return tree
     
+def req_1(control,date1,date2):
+    
+    lista_por_fecha = lt.newList()  
+    for earthquake in lt.iterator(control["earthquakes_list"]):
+        if earthquake["time"]>date1 and earthquake["time"]<date2:
+            date1t = datetime.strptime(date1, "%Y-%m-%dT%H:%M:%S.%fZ")
+            date2t = datetime.strptime(date2, "%Y-%m-%dT%H:%M:%S.%fZ")
+            if comparar_tiempos(date1t,date2t) == 1:
+                lt.addLast(lista_por_fecha, earthquake)
+    return lista_por_fecha            
+        
+
+def req_2(control, mag1, mag2):
+    lista_por_magnitud = lt.newList()
+    for earthquake in lt.iterator(control["earthquakes_list"]):
+        mag = earthquake["mag"]
+        if mag1 <= mag <= mag2:
+            lt.addLast(lista_por_magnitud, earthquake)
+    return lista_por_magnitud
+
+from DISClib.ADT import list as lt
+
+def req_3(control, mag_min, depth_max):
+    # Crear una lista para almacenar los eventos que cumplen con los criterios
+    eventos_filtrados = lt.newList()
+
+    # Filtrar los eventos según la magnitud y profundidad
+    for earthquake in lt.iterator(control["earthquakes_list"]):
+        mag = earthquake["mag"]
+        depth = earthquake["depth"]
+
+        if mag >= mag_min and depth <= depth_max:
+            lt.addLast(eventos_filtrados, earthquake)
+
+    # Ordenar la lista por fecha de forma descendente (más reciente primero)
+    eventos_filtrados = sorted(lt.toArray(eventos_filtrados), key=lambda x: x["date"], reverse=True)
+
+    # Tomar los 10 eventos más recientes
+    eventos_recientes = eventos_filtrados[:10]
+
+    return eventos_recientes
+
+def req_4(control, sig_min, gap_max):
+    # Crear una lista para almacenar los eventos que cumplen con los criterios
+    eventos_filtrados = lt.newList()
+
+    # Filtrar los eventos según la significancia y el gap
+    for earthquake in lt.iterator(control["earthquakes_list"]):
+        sig = earthquake["sig"]
+        gap = earthquake["gap"]
+
+        if sig >= sig_min and gap <= gap_max:
+            lt.addLast(eventos_filtrados, earthquake)
 
     
+    eventos_filtrados = sorted(lt.toArray(eventos_filtrados), key=lambda x: x["date"], reverse=True)
+
     
-    
+    eventos_recientes = eventos_filtrados[:10]
+
+    return eventos_recientes
+
+def req_5(control, depth_min, nst_min):
+    # Crear una lista para almacenar los eventos que cumplen con los criterios
+    eventos_filtrados = lt.newList()
+
+    # Filtrar los eventos según la profundidad y el número mínimo de estaciones
+    for earthquake in lt.iterator(control["earthquakes_list"]):
+        depth = earthquake["depth"]
+        nst = earthquake["nst"]
+
+        if depth > depth_min and nst >= nst_min:
+            lt.addLast(eventos_filtrados, earthquake)
+
+    # Ordenar la lista por fecha de forma descendente (más reciente primero)
+    eventos_filtrados = sorted(lt.toArray(eventos_filtrados), key=lambda x: x["date"], reverse=True)
+
+    # Tomar los 20 eventos más recientes
+    eventos_recientes = eventos_filtrados[:20]
+
+    return eventos_recientes
+
 
 def req_6(control, año, latitud, longitud, radio, n_eventos):
     

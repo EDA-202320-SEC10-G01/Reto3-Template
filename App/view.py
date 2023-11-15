@@ -132,12 +132,45 @@ def print_data(control):
     print_table(control["earthquakes_list"], columns_to_show)
     
 
-def print_req_1(control):
+def print_req_3(control):
     """
-        Función que imprime la solución del Requerimiento 1 en consola
+        Función que imprime la solución del Requerimiento 3 en consola
     """
-    # Se obtiene la información solicitada al modelo
-    print(controller.model.om.minKey(control["earthquakes_tree_mag"]))
+    mag_min = input("Ingrese la magnitud minima a buscar\n")
+    depth_max = input("Ingrese la profundidad maxima a buscar\n")
+    columnas = ["time", "mag", "lat", "long", "depth", "sig", "gap", "nst", "title", "cdi", "mmi", "magType", "type", "code"]
+    
+    
+    data = controller.req_3(control, mag_min, depth_max)
+    
+    print_table(data, columnas)
+
+def print_req_4(control):
+    """
+        Función que imprime la solución del Requerimiento 4 en consola
+    """
+    sig_min = input("Ingrese el sig minimo a buscar\n")
+    gap_max = input("Ingrese el gap maximo a buscar\n")
+    columnas = ["time", "mag", "lat", "long", "depth", "sig", "gap", "nst", "title", "cdi", "mmi", "magType", "type", "code"]
+    
+    
+    data = controller.req_4(control, sig_min, gap_max)
+    
+    print_table(data, columnas)
+
+ def print_req_5(control):
+    """
+        Función que imprime la solución del Requerimiento 5 en consola
+    """
+    depth_min = input("Ingrese la profundidad minima a buscar\n")
+    nst_min = input("Ingrese el nst minimo a buscar\n")
+    columnas = ["time", "mag", "lat", "long", "depth", "sig", "gap", "nst", "title", "cdi", "mmi", "magType", "type", "code"]
+    
+    
+    data = controller.req_5(control, año, latitud, longitud, radio, n_eventos)
+    
+    print_table(data, columnas)       
+
 
 
 def print_req_6(control):

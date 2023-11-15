@@ -122,14 +122,70 @@ def delta_memory(stop_memory, start_memory):
     return delta_memory
 
 # Funciones de requerimientos   
-def req_1(control, fecha_inicial, fecha_final):
+def req_1(control, date1, date2):
     """
     Retorna una lista con los sismos que ocurrieron en el intervalo de tiempo dado
     """
     tracemalloc.start()
     first_time = get_time()
     first_memory = get_memory()
-    model_response = model.req_1(control, fecha_inicial, fecha_final)
+    model_response = model.req_1(control, date1, date2)
+    last_time = get_time()
+    last_memory = get_memory()
+    tracemalloc.stop()
+
+    time = delta_time(first_time, last_time)
+    memory = delta_memory(last_memory, first_memory)
+
+    return model_response, time, memory
+
+def req_2(control,mag1,mag2):
+    tracemalloc.start()
+    first_time = get_time()
+    first_memory = get_memory()
+    model_response = model.req_2(control, mag1, mag2)
+    last_time = get_time()
+    last_memory = get_memory()
+    tracemalloc.stop()
+
+    time = delta_time(first_time, last_time)
+    memory = delta_memory(last_memory, first_memory)
+
+    return model_response, time, memory
+
+def req_3(control, mag_min, depth_max):
+    tracemalloc.start()
+    first_time = get_time()
+    first_memory = get_memory()
+    model_response = model.req_3(control, mag_min, depth_max)
+    last_time = get_time()
+    last_memory = get_memory()
+    tracemalloc.stop()
+
+    time = delta_time(first_time, last_time)
+    memory = delta_memory(last_memory, first_memory)
+
+    return model_response, time, memory
+
+def req_4(control, date1, date2, mag_min, mag_max):
+    tracemalloc.start()
+    first_time = get_time()
+    first_memory = get_memory()
+    model_response = model.req_4(control, date1, date2, mag_min, mag_max)
+    last_time = get_time()
+    last_memory = get_memory()
+    tracemalloc.stop()
+
+    time = delta_time(first_time, last_time)
+    memory = delta_memory(last_memory, first_memory)
+
+    return model_response, time, memory
+
+def req_5(control, depth_min, nst_min):
+    tracemalloc.start()
+    first_time = get_time()
+    first_memory = get_memory()
+    model_response = model.req_5(control, depth_min, nst_min)
     last_time = get_time()
     last_memory = get_memory()
     tracemalloc.stop()
